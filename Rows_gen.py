@@ -13,7 +13,7 @@ end_date = dt.datetime.now()
 f.write("insert into {} values ".format("subscriptions"))
 print("insert into {} values ".format("subscriptions"))
 
-for i in range(10000):
+for i in range(1000):
 
     rnd_delta = rnd.random()
 
@@ -29,12 +29,8 @@ for i in range(10000):
     if rnd.random() < 0.5:
         end_date = dt.datetime(9999, 1, 31)
     else:
-        while True:
-            end_date = start_date + dt.timedelta(rnd.randint(1, 90))
-            if end_date.date() > dt.datetime.now().date():
-                continue
-            else:
-                break
+        end_date = start_date + dt.timedelta(rnd.randint(1, 3)*30)
+
 
     f.write("({}, '{}', '{}', {}),".format(i+1, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), rnd.randint(1, 4)))
     print("({}, '{}', '{}', {}),".format(i+1, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), rnd.randint(1, 4)))
