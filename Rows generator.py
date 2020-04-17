@@ -1,73 +1,36 @@
 # Inserting random data into SQL-database
 # For churn rate analysis
 
-
-"""
-import pyodbc
-server = 'DESKTOP-D4KA4D1\SQLEXPRESS' 
-database = 'Test' 
-username = 'gkkor' 
-password = ''
-cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
-cursor = cnxn.cursor()
-
-cursor.execute('SELECT * FROM '+database+'.subscriptions')
-
-for row in cursor:
-    print(row)
-"""
-
 import random as rnd
-import time
+import datetime as dt
 
-f = open("randomdata.sql", "w").close()
-f = open("randomdata.sql", "a")
+start_date = dt.datetime.now()
+end_date = dt.datetime.now()
 
-# Measuring elapsed time
-start_time = time.time()
+print("insert into {} values ".format("subscriptions"))
 
-f.write("insert into subscriptions values ")
-# print("insert into subscriptions values ")
-for i in range(999):
-    start_date = [rnd.randint(2010, 2019), rnd.randint(1, 12), rnd.randint(1, 28)]
-    end_date = [None, None, None]
+for i in range(4000):
 
-    # With the probability of 50% each user has canceled his subscription
-    if rnd.random() > 0.5:
-        # Start and end date generator starts
+    rnd_delta = rnd.random()
+
+    if 0 < rnd_delta < 0.33:
+        start_date = dt.datetime.now() - dt.timedelta(rnd.randint(1, 30))
+    elif 0.33 <= rnd_delta < 0.66:
+        start_date = dt.datetime.now() - dt.timedelta(rnd.randint(30, 60))
+    else:
+        start_date = dt.datetime.now() - dt.timedelta(rnd.randint(60, 90))
+
+    rnd_delta = rnd.random()
+
+    if rnd.random() < 0.5:
+        end_date = dt.datetime(9999, 1, 31)
+    else:
         while True:
-            end_date[0] = rnd.randint(2010, 2019)
-            if end_date[0] < start_date[0]:
+            end_date = start_date + dt.timedelta(rnd.randint(1, 90))
+            if end_date.date() > dt.datetime.now().date():
                 continue
             else:
                 break
 
-        if end_date[0] > start_date[0]:
-            end_date[1] = rnd.randint(1, 12)
-            end_date[2] = rnd.randint(1, 28)
-        else:
-            while True:
-                end_date[1] = rnd.randint(1, 12)
-                if end_date[1] > start_date[1]:
-                    end_date[2] = rnd.randint(1, 28)
-                    break
-                elif end_date[1] == start_date[1]:
-                    if start_date[2] != 28:
-                        end_date[2] = rnd.randint(start_date[2], 28)
-                    else:
-                        end_date[2] = 28
-                    break
-                else:
-                    continue
-        # Start and end date generator ends
+    print("({}, '{}', '{}', {}),".format(i+1, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), rnd.randint(1, 4)))
 
-
-    if end_date[0] is not None:
-        print("({}, '{}-{}-{}', '{}-{}-{}', {}),".format(i+1, start_date[0], start_date[1], start_date[2], end_date[0], end_date[1], end_date[2], rnd.randint(1, 4)))
-        f.write("({}, '{}-{}-{}', '{}-{}-{}', {}),\n".format(i+1, start_date[0], start_date[1], start_date[2], end_date[0], end_date[1], end_date[2], rnd.randint(1, 4)))
-    else:
-        print("({}, '{}-{}-{}', '9999-12-31', {}),".format(i+1, start_date[0], start_date[1], start_date[2], rnd.randint(1, 4)))
-        f.write("({}, '{}-{}-{}', '9999-12-31', {}),\n".format(i+1, start_date[0], start_date[1], start_date[2], rnd.randint(1, 4)))
-
-print("Rows created! Elapsed: {}".format(time.time()-start_time))
-f.close()
