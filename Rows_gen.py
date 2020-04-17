@@ -10,8 +10,8 @@ f = open("randomdata.sql", "a")
 start_date = dt.datetime.now()
 end_date = dt.datetime.now()
 
-f.write("insert into {} values ".format("subscriptions"))
-print("insert into {} values ".format("subscriptions"))
+f.write("use Test;\ndelete from {0};\ninsert into {0} values ".format("subscriptions"))
+print("use Test;\ndelete from {0}\ninsert into {0} values ".format("subscriptions"))
 
 for i in range(1000):
 
