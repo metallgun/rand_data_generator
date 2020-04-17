@@ -4,12 +4,16 @@
 import random as rnd
 import datetime as dt
 
+f = open("randomdata.sql", "w").close()
+f = open("randomdata.sql", "a")
+
 start_date = dt.datetime.now()
 end_date = dt.datetime.now()
 
+f.write("insert into {} values ".format("subscriptions"))
 print("insert into {} values ".format("subscriptions"))
 
-for i in range(4000):
+for i in range(10000):
 
     rnd_delta = rnd.random()
 
@@ -32,5 +36,6 @@ for i in range(4000):
             else:
                 break
 
+    f.write("({}, '{}', '{}', {}),".format(i+1, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), rnd.randint(1, 4)))
     print("({}, '{}', '{}', {}),".format(i+1, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), rnd.randint(1, 4)))
 
