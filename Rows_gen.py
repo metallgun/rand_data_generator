@@ -39,3 +39,4 @@ for i in range(10000):
     f.write("({}, '{}', '{}', {}),".format(i+1, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), rnd.randint(1, 4)))
     print("({}, '{}', '{}', {}),".format(i+1, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), rnd.randint(1, 4)))
 
+f.close()
